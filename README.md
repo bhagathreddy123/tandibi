@@ -13,3 +13,16 @@ Tandibi is a social media app, a user can sign up then they can follow other use
 rails g annotate:install
 
  rails g model User username:uniq first_name last_name email:uniq is_public:boolean
+
+ we use the model Bond to indicate a connection between one user and another. it has the state field to indicate the state of the connection. 
+
+
+ state                            description.
+ requesting        when a user senda a follow request to another user( which will be accepting 
+                                         autometically    if it's a public account)
+ following          when a user is following another user      
+ blocking              When a user is blocked another user
+
+ rails g model post user_id:bigint thread_id:bigint postable:references{polymorphic}
+rails g model Picture post_id:bigint caption
+rails g model status text
