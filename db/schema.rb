@@ -10,10 +10,11 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_06_02_090017) do
+ActiveRecord::Schema.define(version: 2021_06_02_095409) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+  enable_extension "postgis"
 
   create_table "bonds", force: :cascade do |t|
     t.bigint "user_id", null: false
@@ -31,6 +32,18 @@ ActiveRecord::Schema.define(version: 2021_06_02_090017) do
     t.datetime "updated_at", precision: 6, null: false
   end
 
+  create_table "places", force: :cascade do |t|
+    t.string "locale", null: false
+    t.geography "coordinate", limit: {:srid=>4326, :type=>"st_point", :has_z=>true, :geographic=>true}, null: false
+    t.string "name", null: false
+    t.string "place_type", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["coordinate"], name: "index_places_on_coordinate", using: :gist
+    t.index ["locale", "coordinate"], name: "index_places_on_locale_and_coordinate", unique: true
+    t.index ["locale"], name: "index_places_on_locale"
+  end
+
   create_table "posts", force: :cascade do |t|
     t.bigint "user_id"
     t.bigint "thread_id"
@@ -39,6 +52,14 @@ ActiveRecord::Schema.define(version: 2021_06_02_090017) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["postable_type", "postable_id"], name: "index_posts_on_postable_type_and_postable_id"
+  end
+
+  create_table "sights", force: :cascade do |t|
+    t.bigint "place_id"
+    t.string "activity_type", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["place_id"], name: "index_sights_on_place_id"
   end
 
   create_table "statuses", force: :cascade do |t|

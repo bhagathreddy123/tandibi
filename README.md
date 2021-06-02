@@ -26,3 +26,11 @@ rails g annotate:install
  rails g model post user_id:bigint thread_id:bigint postable:references{polymorphic}
 rails g model Picture post_id:bigint caption
 rails g model status text
+
+PG::UndefinedFile: ERROR:  could not open extension control file "/usr/share/postgresql/12/extension/postgis.control": No such file or directory
+
+sudo apt install postgis postgresql-postgis
+
+PostGIS seems to be the tool of choice in the commuinity for managing spatial and geographical data. Other than using PostGIS we may use postgresqls own data type or even primitively store the points manually as different columns.
+
+rails g model Sight place:refereces activity_type
